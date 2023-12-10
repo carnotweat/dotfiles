@@ -1,0 +1,24 @@
+{ config, lib, pkgs, ... }:
+let paths = [ ./bla.nix ./other.nix ]; in
+with lib; {
+  imports = paths;
+
+  options = {
+    habitsremixloop.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to enable habitsremixloop service";
+    };
+    habitsremixloop.styles = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "debstep" "trance" "house" ];
+      description = "The types of remix styles to include.";
+    };
+  };
+
+  config = mkIf config.services.habitsremixloop.enable {
+    environment.systemPackages = [ habitsremixloop ];
+    systemd.services.habitsremixloop = ...;
+  };
+}
