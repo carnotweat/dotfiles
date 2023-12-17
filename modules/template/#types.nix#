@@ -1,0 +1,18 @@
+{ options, ... }: {
+  options.smolString = mkOption {
+    type = types.addCheck (s: builtins.stringLength s < 32) types.str;
+  };
+  options.funType = mkOption {
+    type = types.mkOptionType {
+      check = builtins.isFunction;
+      # Merge functions by joining the attributes they create
+      merge = loc: defs: arg: foldl' (l: r: l // r) {} (map (d: d.value arg) defs);
+    };
+  };
+  options.value = mkOption {
+    type = coercedTo str (s: { name = s; }) (submodule {
+      options.name = mkOption { type = str; };
+      options.other = mkOption { /* ... */ };
+    });
+  };
+}
