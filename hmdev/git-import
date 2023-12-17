@@ -1,6 +1,0 @@
-git log --show-signature \
-                                            | grep 'key ID' \
-                                            | grep -o '[A-Z0-9]\+$' \
-                                            | sort \
-                                            | uniq \
-                                            | xargs gpg --keyserver keys.openpgp.org --recv-keys 1FB20D8EE8067117
